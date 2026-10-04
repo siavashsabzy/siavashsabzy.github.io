@@ -1,281 +1,525 @@
-
-<html lang="en" class="scroll-smooth">
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Siavash Sabzy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b1115">
+    <meta name="description" content="Siavash Sabzy explores astrodynamics, orbital mechanics, spacecraft navigation, and mission design through computational projects.">
+    <meta property="og:title" content="Siavash Sabzy — Astrodynamics">
+    <meta property="og:description" content="Exploring orbital dynamics, spacecraft navigation, and mission design through computation.">
+    <meta property="og:type" content="website">
+    <title>Siavash Sabzy — Astrodynamics</title>
     <link rel="icon" type="image/png" href="icon.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Custom animations */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        :root {
+            color-scheme: dark;
+            --bg: #0b1115;
+            --surface: #111a20;
+            --surface-raised: #152129;
+            --text: #edf1eb;
+            --muted: #a0adae;
+            --subtle: #66767a;
+            --line: rgba(213, 228, 222, .13);
+            --accent: #c7f36b;
+            --accent-dark: #172511;
+            --cyan: #79d7d2;
+            --content: 1160px;
         }
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+        body {
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 78% 8%, rgba(36, 76, 73, .2), transparent 34rem),
+                var(--bg);
+            color: var(--text);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
-        .glass-nav {
-            background: rgba(17, 24, 39, 0.8);
-            backdrop-filter: blur(10px);
+        a { color: inherit; }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+        .skip-link {
+            position: absolute;
+            top: -60px;
+            left: 16px;
+            z-index: 10;
+            padding: 10px 14px;
+            background: var(--accent);
+            color: var(--bg);
+        }
+        .skip-link:focus { top: 12px; }
+        .wrap { width: min(var(--content), calc(100% - 48px)); margin-inline: auto; }
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            border-bottom: 1px solid var(--line);
+            background: rgba(11, 17, 21, .88);
+            backdrop-filter: blur(16px);
+        }
+        .nav-row { min-height: 76px; display: flex; align-items: center; justify-content: space-between; }
+        .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 650; letter-spacing: -.02em; }
+        .brand-mark {
+            display: grid;
+            width: 34px;
+            aspect-ratio: 1;
+            place-items: center;
+            border: 1px solid rgba(199, 243, 107, .5);
+            border-radius: 50%;
+            color: var(--accent);
+            font-family: Georgia, serif;
+            font-size: 17px;
+        }
+        .brand span:last-child { font-size: 14px; }
+        .nav-links { display: flex; align-items: center; gap: 32px; }
+        .nav-links a { color: var(--muted); font-size: 13px; text-decoration: none; transition: color .2s ease; }
+        .nav-links a:hover { color: var(--text); }
+        .nav-links .nav-contact { color: var(--accent); }
+        .menu-toggle {
+            display: none;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text);
+            font: inherit;
+            cursor: pointer;
+        }
+        .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+        .hero-grid {
+            min-height: 650px;
+            display: grid;
+            grid-template-columns: 1.03fr .97fr;
+            align-items: center;
+            gap: 30px;
+            padding-block: 88px 76px;
+        }
+        .eyebrow, .section-index {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 650;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+        }
+        .eyebrow::before { width: 24px; height: 1px; background: var(--accent); content: ""; }
+        h1, h2, h3, p { margin-top: 0; }
+        h1 {
+            max-width: 670px;
+            margin: 26px 0 20px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(54px, 7.5vw, 92px);
+            font-weight: 400;
+            letter-spacing: -.065em;
+            line-height: .99;
+        }
+        h1 span { color: var(--accent); font-style: italic; }
+        .hero-copy { max-width: 500px; color: var(--muted); font-size: 17px; }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+        .button {
+            display: inline-flex;
+            min-height: 46px;
+            align-items: center;
+            justify-content: center;
+            gap: 11px;
+            padding: 0 18px;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 620;
+            text-decoration: none;
+            transition: transform .2s ease, border-color .2s ease, background .2s ease;
+        }
+        .button:hover { transform: translateY(-2px); border-color: rgba(199, 243, 107, .55); }
+        .button-primary { border-color: var(--accent); background: var(--accent); color: #11180d; }
+        .button-primary:hover { background: #d5fa8e; }
+        .button-arrow { font-size: 17px; line-height: 1; }
+        .orbit-art { position: relative; width: min(100%, 510px); margin: 0 auto; }
+        .orbit-art::after {
+            position: absolute;
+            inset: 12%;
+            z-index: -1;
+            border-radius: 50%;
+            background: rgba(68, 137, 132, .14);
+            content: "";
+            filter: blur(48px);
+        }
+        .orbit-art svg { display: block; width: 100%; overflow: visible; }
+        .hero-caption {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-top: -5px;
+            color: var(--subtle);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 10px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        .hero-caption::before { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); content: ""; }
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 28px;
+            padding: 18px 0 21px;
+            border-top: 1px solid var(--line);
+            color: var(--subtle);
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        .hero-meta strong { color: var(--muted); font-weight: 500; }
+        section { scroll-margin-top: 80px; }
+        .section { padding-block: 108px; }
+        .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 42px; }
+        .section-index { margin-bottom: 12px; color: var(--cyan); }
+        .section-heading h2 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(36px, 5vw, 54px);
+            font-weight: 400;
+            letter-spacing: -.045em;
+            line-height: 1.08;
+        }
+        .section-note { max-width: 370px; margin: 0; color: var(--muted); font-size: 14px; }
+        .about-layout { display: grid; grid-template-columns: 1.1fr .9fr; gap: 80px; align-items: start; }
+        .about-copy { max-width: 600px; color: var(--muted); font-size: 16px; }
+        .about-copy p { margin-bottom: 17px; }
+        .about-copy strong { color: var(--text); font-weight: 550; }
+        .focus-panel { border-top: 1px solid var(--line); }
+        .focus-row {
+            display: grid;
+            grid-template-columns: 34px 1fr;
+            gap: 13px;
+            padding: 17px 0;
+            border-bottom: 1px solid var(--line);
+        }
+        .focus-number { color: var(--accent); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+        .focus-row h3 { margin: 0 0 3px; font-size: 14px; font-weight: 570; }
+        .focus-row p { margin: 0; color: var(--subtle); font-size: 12px; }
+        .projects-section { background: rgba(17, 26, 32, .72); border-block: 1px solid var(--line); }
+        .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .project-card {
+            display: flex;
+            min-height: 354px;
+            flex-direction: column;
+            padding: 24px;
+            border: 1px solid var(--line);
+            background: linear-gradient(145deg, rgba(21, 33, 41, .92), rgba(15, 23, 28, .92));
+            transition: transform .25s ease, border-color .25s ease;
+        }
+        .project-card:hover { transform: translateY(-4px); border-color: rgba(121, 215, 210, .42); }
+        .project-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 35px; }
+        .project-number { color: var(--subtle); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+        .project-icon { width: 47px; height: 47px; color: var(--cyan); }
+        .project-card h3 {
+            margin-bottom: 11px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 23px;
+            font-weight: 400;
+            letter-spacing: -.025em;
+            line-height: 1.2;
+        }
+        .project-card > p { margin-bottom: 22px; color: var(--muted); font-size: 13px; }
+        .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; padding-top: 8px; }
+        .tag { padding: 4px 8px; border: 1px solid var(--line); color: #a8bab9; font-size: 10px; }
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            align-self: flex-start;
+            margin-top: 23px;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .project-link:hover { color: #e1ffad; }
+        .contact-section { padding-block: 105px 112px; text-align: center; }
+        .contact-section .section-index { justify-content: center; }
+        .contact-section h2 {
+            max-width: 640px;
+            margin: 0 auto 16px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(42px, 6vw, 66px);
+            font-weight: 400;
+            letter-spacing: -.05em;
+            line-height: 1.03;
+        }
+        .contact-section > .wrap > p { max-width: 480px; margin: 0 auto 28px; color: var(--muted); font-size: 14px; }
+        .contact-links { display: flex; justify-content: center; gap: 22px; margin-top: 27px; }
+        .contact-links a { color: var(--muted); font-size: 12px; text-decoration: none; }
+        .contact-links a:hover { color: var(--accent); }
+        .site-footer { border-top: 1px solid var(--line); }
+        .footer-row { display: flex; min-height: 76px; align-items: center; justify-content: space-between; gap: 20px; color: var(--subtle); font-size: 11px; }
+        .footer-row a { color: var(--muted); text-decoration: none; }
+        .footer-row a:hover { color: var(--accent); }
+
+        @media (max-width: 760px) {
+            .wrap { width: min(100% - 36px, var(--content)); }
+            .nav-row { min-height: 66px; }
+            .menu-toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; }
+            .nav-links {
+                position: absolute;
+                top: 65px;
+                right: 0;
+                left: 0;
+                display: none;
+                align-items: stretch;
+                gap: 0;
+                padding: 8px 18px 16px;
+                border-bottom: 1px solid var(--line);
+                background: var(--bg);
+            }
+            .nav-links.is-open { display: flex; flex-direction: column; }
+            .nav-links a { padding: 12px 0; }
+            .hero-grid { min-height: auto; grid-template-columns: 1fr; gap: 27px; padding-block: 84px 46px; }
+            h1 { max-width: 570px; font-size: clamp(58px, 12vw, 82px); }
+            .hero-copy { max-width: 500px; font-size: 15px; }
+            .orbit-art { width: min(100%, 430px); }
+            .hero-caption { justify-content: center; }
+            .hero-meta { gap: 8px 18px; font-size: 9px; }
+            .section { padding-block: 76px; }
+            .section-heading { align-items: flex-start; flex-direction: column; margin-bottom: 30px; }
+            .about-layout { grid-template-columns: 1fr; gap: 27px; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-card { min-height: 300px; }
+            .project-top { margin-bottom: 25px; }
+            .contact-section { padding-block: 80px; }
+        }
+        @media (max-width: 420px) {
+            .wrap { width: calc(100% - 30px); }
+            .hero-actions { align-items: stretch; flex-direction: column; }
+            .hero-actions .button { width: 100%; }
+            .hero-meta { display: grid; grid-template-columns: 1fr 1fr; }
+            .footer-row { align-items: flex-start; flex-direction: column; justify-content: center; gap: 4px; padding-block: 17px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans antialiased">
-
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-nav border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <span class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-                        Curriculum vitae
-                    </span>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#home" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
-                        <a href="#about" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
-                        <a href="#projects" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Projects</a>
-                        <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">Contact Me</a>
-                    </div>
-                </div>
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white p-2">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 pb-4">
-            <a href="#home" class="block px-4 py-2 text-sm hover:bg-gray-700">Home</a>
-            <a href="#about" class="block px-4 py-2 text-sm hover:bg-gray-700">About</a>
-            <a href="#projects" class="block px-4 py-2 text-sm hover:bg-gray-700">Projects</a>
-            <a href="#contact" class="block px-4 py-2 text-sm text-blue-400 font-bold">Contact Me</a>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
-        <!-- Background decorative blobs -->
-        <div class="absolute top-20 left-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float"></div>
-        <div class="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float" style="animation-delay: 1s;"></div>
-
-        <div class="text-center z-10 px-4">
-            <div class="mb-6 inline-block">
-                <i class="fas fa-code text-6xl text-blue-500 mb-4 animate-float"></i>
-            </div>
-            <h1 class="text-5xl md:text-7xl font-bold mb-6">
-                Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Sia</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto">
-                Astrodynamicist.
-            </p>
-            <div class="flex justify-center gap-4">
-                <a href="#projects" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/30">
-                    View Work
-                </a>
-                <a href="https://github.com/siavashsabzy" target="_blank" class="px-8 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-semibold transition-all transform hover:scale-105">
-                    <i class="fab fa-github mr-2"></i> GitHub
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-20 bg-gray-800/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
-                <div class="w-20 h-1 bg-blue-500 mx-auto rounded"></div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6">
-                    <p class="text-lg text-gray-300 leading-relaxed">
-                        Demo profile.
-                    </p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 bg-gray-800 rounded-lg border border-gray-700">
-                            <i class="fas fa-bolt text-yellow-500 mb-2"></i>
-                            <h3 class="font-bold">Fast Performance</h3>
-                        </div>
-                        <div class="p-4 bg-gray-800 rounded-lg border border-gray-700">
-                            <i class="fas fa-mobile-alt text-green-500 mb-2"></i>
-                            <h3 class="font-bold">Responsive</h3>
-                        </div>
-                        <div class="p-4 bg-gray-800 rounded-lg border border-gray-700">
-                            <i class="fas fa-lightbulb text-orange-500 mb-2"></i>
-                            <h3 class="font-bold">Intuitive</h3>
-                        </div>
-                        <div class="p-4 bg-gray-800 rounded-lg border border-gray-700">
-                            <i class="fas fa-rocket text-red-500 mb-2"></i>
-                            <h3 class="font-bold">Dynamic</h3>
-                        </div>
-                    </div>
-                </div>
-                <!-- Skill Bars -->
-                <div class="space-y-6 bg-gray-800 p-8 rounded-xl shadow-xl">
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="font-medium">HTML/CSS</span>
-                            <span class="text-blue-400">90%</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2.5">
-                            <div class="bg-blue-500 h-2.5 rounded-full" style="width: 90%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="font-medium">JavaScript</span>
-                            <span class="text-purple-400">85%</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2.5">
-                            <div class="bg-purple-500 h-2.5 rounded-full" style="width: 85%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="font-medium">React</span>
-                            <span class="text-cyan-400">75%</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2.5">
-                            <div class="bg-cyan-500 h-2.5 rounded-full" style="width: 75%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="font-medium">Python</span>
-                            <span class="text-yellow-400">80%</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2.5">
-                            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 80%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">My Projects</h2>
-                <div class="w-20 h-1 bg-purple-500 mx-auto rounded"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project Card 1 -->
-                <div class="bg-gray-800 rounded-xl overflow-hidden hover:transform hover:-translate-y-2 transition-all duration-300 shadow-lg group">
-                    <div class="h-48 bg-gray-700 flex items-center justify-center group-hover:bg-gray-600 transition-colors">
-                        <i class="fas fa-gamepad text-5xl text-gray-500 group-hover:text-blue-400 transition-colors"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Retro Game</h3>
-                        <p class="text-gray-400 mb-4 text-sm">A browser-based arcade game built with vanilla JavaScript and HTML5 Canvas.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-2 py-1 bg-blue-900/30 text-blue-300 text-xs rounded-full">JavaScript</span>
-                            <span class="px-2 py-1 bg-blue-900/30 text-blue-300 text-xs rounded-full">Canvas</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <a href="#" class="text-blue-400 hover:text-blue-300 text-sm font-semibold">View Demo <i class="fas fa-arrow-right ml-1"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github text-xl"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project Card 2 -->
-                <div class="bg-gray-800 rounded-xl overflow-hidden hover:transform hover:-translate-y-2 transition-all duration-300 shadow-lg group">
-                    <div class="h-48 bg-gray-700 flex items-center justify-center group-hover:bg-gray-600 transition-colors">
-                        <i class="fas fa-chart-line text-5xl text-gray-500 group-hover:text-purple-400 transition-colors"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Finance Tracker</h3>
-                        <p class="text-gray-400 mb-4 text-sm">A personal finance dashboard to track expenses and visualize spending habits.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-2 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full">React</span>
-                            <span class="px-2 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full">Chart.js</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <a href="#" class="text-blue-400 hover:text-blue-300 text-sm font-semibold">View Demo <i class="fas fa-arrow-right ml-1"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github text-xl"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project Card 3 -->
-                <div class="bg-gray-800 rounded-xl overflow-hidden hover:transform hover:-translate-y-2 transition-all duration-300 shadow-lg group">
-                    <div class="h-48 bg-gray-700 flex items-center justify-center group-hover:bg-gray-600 transition-colors">
-                        <i class="fas fa-cloud text-5xl text-gray-500 group-hover:text-cyan-400 transition-colors"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Weather App</h3>
-                        <p class="text-gray-400 mb-4 text-sm">Real-time weather application consuming a public API with location services.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-2 py-1 bg-cyan-900/30 text-cyan-300 text-xs rounded-full">API</span>
-                            <span class="px-2 py-1 bg-cyan-900/30 text-cyan-300 text-xs rounded-full">CSS</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <a href="#" class="text-blue-400 hover:text-blue-300 text-sm font-semibold">View Demo <i class="fas fa-arrow-right ml-1"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github text-xl"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gray-800/50">
-        <div class="max-w-3xl mx-auto px-4 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-8">Get In Touch</h2>
-            <p class="text-xl text-gray-300 mb-8">
-                I'm currently looking for new opportunities. Whether you have a question or just want to say hi, my inbox is always open!
-            </p>
-            <a href="mailto:siavashsabzy@hotmail.com" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-full transition-all hover:shadow-lg hover:shadow-blue-500/40 mb-12">
-                Say Hello <i class="fas fa-paper-plane ml-2"></i>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+        <div class="wrap nav-row">
+            <a class="brand" href="#home" aria-label="Siavash Sabzy, home">
+                <span class="brand-mark" aria-hidden="true">S</span>
+                <span>SIAVASH SABZY</span>
             </a>
-
-            <div class="flex justify-center space-x-8">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-github"></i></a>
-                <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors text-2xl"><i class="fab fa-linkedin"></i></a>
-                <a href="#" class="text-gray-400 hover:text-blue-300 transition-colors text-2xl"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="text-gray-400 hover:text-pink-500 transition-colors text-2xl"><i class="fab fa-instagram"></i></a>
-            </div>
+            <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+                <span>Menu</span><span aria-hidden="true">☰</span>
+            </button>
+            <nav class="nav-links" id="site-navigation" aria-label="Main navigation">
+                <a href="#about">About</a>
+                <a href="#projects">Selected work</a>
+                <a class="nav-contact" href="#contact">Get in touch ↗</a>
+            </nav>
         </div>
-    </section>
+    </header>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-800 py-8 text-center text-gray-500 text-sm">
-        <p>&copy; siavash sabzy</p>
+    <main id="main">
+        <section class="hero" id="home">
+            <div class="wrap hero-grid">
+                <div>
+                    <div class="eyebrow">Astrodynamics &amp; space systems</div>
+                    <h1>Understanding motion <span>beyond Earth.</span></h1>
+                    <p class="hero-copy">I’m Siavash Sabzy. I explore orbital dynamics, spacecraft navigation, and mission design through computation.</p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#projects">Explore selected work <span class="button-arrow" aria-hidden="true">↘</span></a>
+                        <a class="button" href="https://github.com/siavashsabzy" target="_blank" rel="noopener noreferrer">GitHub <span class="button-arrow" aria-hidden="true">↗</span></a>
+                    </div>
+                </div>
+                <div class="orbit-art">
+                    <svg viewBox="0 0 520 460" role="img" aria-labelledby="orbit-title orbit-description">
+                        <title id="orbit-title">Orbital paths around Earth</title>
+                        <desc id="orbit-description">An abstract scientific illustration of spacecraft trajectories around Earth.</desc>
+                        <defs>
+                            <radialGradient id="earth-fill" cx="34%" cy="28%">
+                                <stop offset="0" stop-color="#9be5d5"/>
+                                <stop offset=".48" stop-color="#367c7c"/>
+                                <stop offset="1" stop-color="#17343b"/>
+                            </radialGradient>
+                            <linearGradient id="orbit-stroke" x1="0" x2="1">
+                                <stop stop-color="#c7f36b" stop-opacity=".75"/>
+                                <stop offset="1" stop-color="#79d7d2" stop-opacity=".17"/>
+                            </linearGradient>
+                            <clipPath id="earth-clip"><circle cx="260" cy="224" r="65"/></clipPath>
+                        </defs>
+                        <circle cx="260" cy="224" r="65" fill="url(#earth-fill)"/>
+                        <g clip-path="url(#earth-clip)" fill="none" stroke="#9be5d5" stroke-opacity=".24" stroke-width="1">
+                            <path d="M174 205c37-18 65 15 94 4s48-26 80-11M180 244c40 9 42-24 76-17s45 33 75 28M219 160c-5 31 22 40 13 68s-21 39-4 62M282 158c-21 24-8 46 9 67s10 43-3 64"/>
+                            <path d="M190 184c23 13 49 9 66-5 12 15 31 21 57 18M181 266c28-16 44-13 64-3s44 12 72 0"/>
+                        </g>
+                        <g fill="none" stroke="url(#orbit-stroke)">
+                            <ellipse cx="260" cy="224" rx="205" ry="103" transform="rotate(-24 260 224)" stroke-width="1.3"/>
+                            <ellipse cx="260" cy="224" rx="179" ry="143" transform="rotate(35 260 224)" stroke-width="1.2" stroke-dasharray="3 7"/>
+                            <ellipse cx="260" cy="224" rx="235" ry="71" transform="rotate(11 260 224)" stroke-width=".8" stroke-opacity=".5"/>
+                        </g>
+                        <g fill="#c7f36b">
+                            <circle cx="97" cy="133" r="4"/>
+                            <circle cx="412" cy="306" r="3"/>
+                            <circle cx="405" cy="112" r="2.5" fill="#79d7d2"/>
+                        </g>
+                        <g fill="#a0adae" font-family="ui-monospace, monospace" font-size="9" letter-spacing="1.5">
+                            <text x="30" y="80">EARTH-MOON SYSTEM</text>
+                            <text x="370" y="390">TRAJECTORY / 01</text>
+                        </g>
+                        <g stroke="#66767a" stroke-width=".8">
+                            <path d="M40 91h48M392 378h60"/>
+                            <path d="M260 39v10M260 399v10M48 224h10M462 224h10"/>
+                        </g>
+                    </svg>
+                    <div class="hero-caption">Orbital mechanics · numerical methods · exploration</div>
+                </div>
+            </div>
+            <div class="wrap hero-meta" aria-label="Areas of interest">
+                <span><strong>01</strong> Celestial mechanics</span>
+                <span><strong>02</strong> Orbit determination</span>
+                <span><strong>03</strong> Spacecraft navigation</span>
+            </div>
+        </section>
+
+        <section class="section" id="about">
+            <div class="wrap">
+                <div class="section-heading">
+                    <div>
+                        <div class="section-index">01 / About</div>
+                        <h2>Curiosity, in orbit.</h2>
+                    </div>
+                    <p class="section-note">A computational approach to understanding how spacecraft move, navigate, and work together.</p>
+                </div>
+                <div class="about-layout">
+                    <div class="about-copy">
+                        <p>My interests sit at the intersection of <strong>astrodynamics and space systems</strong>—from the structure of multi-body trajectories to the practical challenges of satellite navigation.</p>
+                        <p>I use code to explore these problems: building numerical tools, studying orbital configurations, and turning mathematical models into results that can be examined and shared.</p>
+                        <p>This site brings together a few projects from my public work. Each one is a small window into the questions I enjoy working on.</p>
+                    </div>
+                    <div class="focus-panel" aria-label="Areas of focus">
+                        <div class="focus-row">
+                            <span class="focus-number">01</span>
+                            <div><h3>Orbital mechanics</h3><p>Three-body dynamics · periodic orbits · propagation</p></div>
+                        </div>
+                        <div class="focus-row">
+                            <span class="focus-number">02</span>
+                            <div><h3>Mission analysis</h3><p>Constellation design · orbit configuration</p></div>
+                        </div>
+                        <div class="focus-row">
+                            <span class="focus-number">03</span>
+                            <div><h3>Navigation &amp; estimation</h3><p>GNSS · orbit determination · computational methods</p></div>
+                        </div>
+                        <div class="focus-row">
+                            <span class="focus-number">04</span>
+                            <div><h3>Tools</h3><p>Python · MATLAB · Orekit · PyMOO</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section projects-section" id="projects">
+            <div class="wrap">
+                <div class="section-heading">
+                    <div>
+                        <div class="section-index">02 / Selected work</div>
+                        <h2>Models to missions.</h2>
+                    </div>
+                    <p class="section-note">A selection of open projects exploring orbital dynamics, constellation design, and navigation.</p>
+                </div>
+                <div class="projects-grid">
+                    <article class="project-card">
+                        <div class="project-top">
+                            <span class="project-number">PROJECT / 01</span>
+                            <svg class="project-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                                <circle cx="24" cy="24" r="5" stroke="currentColor"/>
+                                <ellipse cx="24" cy="24" rx="20" ry="9" transform="rotate(-32 24 24)" stroke="currentColor" opacity=".7"/>
+                                <ellipse cx="24" cy="24" rx="20" ry="14" transform="rotate(54 24 24)" stroke="currentColor" opacity=".42"/>
+                                <circle cx="9" cy="14" r="2" fill="#c7f36b"/>
+                            </svg>
+                        </div>
+                        <h3>Periodic Orbits in the Three-Body Problem</h3>
+                        <p>A single-shooting approach to finding periodic orbits across three-body models, with an Earth–Moon CR3BP orbit database.</p>
+                        <div class="tags"><span class="tag">CR3BP</span><span class="tag">MATLAB</span><span class="tag">Orbit families</span></div>
+                        <a class="project-link" href="https://github.com/siavashsabzy/3bporbits" target="_blank" rel="noopener noreferrer">Explore repository <span aria-hidden="true">↗</span></a>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-top">
+                            <span class="project-number">PROJECT / 02</span>
+                            <svg class="project-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                                <circle cx="24" cy="24" r="3" fill="currentColor"/>
+                                <ellipse cx="24" cy="24" rx="19" ry="7" transform="rotate(-25 24 24)" stroke="currentColor"/>
+                                <ellipse cx="24" cy="24" rx="19" ry="7" transform="rotate(35 24 24)" stroke="currentColor" opacity=".58"/>
+                                <circle cx="8" cy="16" r="2" fill="#c7f36b"/>
+                                <circle cx="37" cy="13" r="2" fill="#79d7d2"/>
+                                <circle cx="32" cy="36" r="2" fill="#c7f36b"/>
+                            </svg>
+                        </div>
+                        <h3>GNSS Constellation Optimization</h3>
+                        <p>A Python toolkit using PyMOO to identify optimal GNSS constellation configurations across varying orbital parameters.</p>
+                        <div class="tags"><span class="tag">Python</span><span class="tag">PyMOO</span><span class="tag">GNSS</span></div>
+                        <a class="project-link" href="https://github.com/siavashsabzy/ss_constellation_optimization" target="_blank" rel="noopener noreferrer">Explore repository <span aria-hidden="true">↗</span></a>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-top">
+                            <span class="project-number">PROJECT / 03</span>
+                            <svg class="project-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                                <circle cx="24" cy="24" r="10" stroke="currentColor"/>
+                                <path d="M24 4v9M24 35v9M4 24h9M35 24h9M10 10l6 6M32 32l6 6M38 10l-6 6M16 32l-6 6" stroke="currentColor" opacity=".55"/>
+                                <circle cx="24" cy="24" r="3" fill="#c7f36b"/>
+                                <path d="M24 24 38 13" stroke="#c7f36b" stroke-dasharray="2 3"/>
+                            </svg>
+                        </div>
+                        <h3>Station + GNSS Orbit Determination</h3>
+                        <p>A Python project applying Orekit to station and GNSS-based satellite constellation orbit determination.</p>
+                        <div class="tags"><span class="tag">Python</span><span class="tag">Orekit</span><span class="tag">Orbit determination</span></div>
+                        <a class="project-link" href="https://github.com/siavashsabzy/ss_constellation_od" target="_blank" rel="noopener noreferrer">Explore repository <span aria-hidden="true">↗</span></a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section" id="contact">
+            <div class="wrap">
+                <div class="section-index">03 / Contact</div>
+                <h2>Let’s talk about what’s next.</h2>
+                <p>For conversations about astrodynamics, space systems, or collaboration, feel free to get in touch.</p>
+                <a class="button button-primary" href="mailto:siavashsabzy@hotmail.com">Email Siavash <span class="button-arrow" aria-hidden="true">↗</span></a>
+                <div class="contact-links">
+                    <a href="https://github.com/siavashsabzy" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap footer-row">
+            <span>© <span id="year">2026</span> Siavash Sabzy</span>
+            <a href="#home">Back to top ↑</a>
+        </div>
     </footer>
-
     <script>
-        // Mobile Menu Toggle
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
+        const menuToggle = document.getElementById("menu-toggle");
+        const navigation = document.getElementById("site-navigation");
 
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
+        menuToggle.addEventListener("click", () => {
+            const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+            menuToggle.setAttribute("aria-expanded", String(!isOpen));
+            navigation.classList.toggle("is-open", !isOpen);
         });
 
-        // Smooth Scroll for anchor links (fallback for older browsers)
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                menu.classList.add('hidden'); // Close mobile menu on click
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+        navigation.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+                menuToggle.setAttribute("aria-expanded", "false");
+                navigation.classList.remove("is-open");
             });
         });
+
+        document.getElementById("year").textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
